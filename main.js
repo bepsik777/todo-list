@@ -1,0 +1,1 @@
+(()=>{"use strict";({sayThis:function(){console.log(this)},title:"finish project",description:"it is a todo app",dueDate:"01-02-2030",addDate:"01-01-1111",priority:3}).sayThis()})();
