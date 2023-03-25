@@ -1,4 +1,6 @@
-const todoFactory = (title, description, dueDate, addDate, priority) => {
+
+
+const Todo = (title, description, dueDate, addDate, priority) => {
   function sayThis() {
     console.log(this);
   }
@@ -13,4 +15,5 @@ const todoFactory = (title, description, dueDate, addDate, priority) => {
   };
 };
 
-export default todoFactory;
+export default Todo;
+

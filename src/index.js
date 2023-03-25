@@ -1,5 +1,7 @@
-import todoFactory from './todo-factory';
+import Todo from './todos';
+import projectFactory from './projects';
+import controlerModule from './controler';
 
-const firstTodo = todoFactory('finish project', 'it is a todo app', '01-02-2030', '01-01-1111', 3);
 
-firstTodo.sayThis();
+controlerModule.createProject(projectFactory, 'default project');
+console.log(controlerModule.projectsArray);
