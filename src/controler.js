@@ -5,16 +5,16 @@ const controlerModule = (() => {
   const createProject = (factory, title) => {
     const project = factory(title);
     projectsArray.push(project);
+    return project;
   };
 
   const switchProject = (project) => {
     activeProject = project;
+    console.log(activeProject);
   };
 
-  const debug = () => console.log(projectsArray);
 
   return {
-    debug,
     projectsArray,
     activeProject,
     createProject,

@@ -3,5 +3,10 @@ import projectFactory from './projects';
 import controlerModule from './controler';
 
 
-controlerModule.createProject(projectFactory, 'default project');
+const defaultProject = controlerModule.createProject(projectFactory, 'default project');
+
+controlerModule.switchProject(defaultProject);
+
 console.log(controlerModule.projectsArray);
+console.log(controlerModule.activeProject);
+
