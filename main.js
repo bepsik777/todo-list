@@ -1,1 +1,1 @@
-(()=>{"use strict";({sayThis:function(){console.log(this)},title:"finish project",description:"it is a todo app",dueDate:"01-02-2030",addDate:"01-01-1111",priority:3}).sayThis()})();
+(()=>{"use strict";const t=(()=>{const t=[];let e;return{debug:()=>console.log(t),projectsArray:t,activeProject:e,createProject:(e,r)=>{const o=e(r);t.push(o)},switchProject:t=>{e=t}}})();t.createProject((function(t){return{todosArray:[],title:t}}),"default project"),console.log(t.projectsArray)})();
