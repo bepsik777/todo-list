@@ -1,3 +1,4 @@
 node_modules
 .prettierignore
 webpack.config.js
+brudnopis.js

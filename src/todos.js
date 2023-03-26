@@ -1,12 +1,10 @@
 
 
 const Todo = (title, description, dueDate, addDate, priority) => {
-  function sayThis() {
-    console.log(this);
-  }
+  const finished = false;
 
   return {
-    sayThis,
+    finished,
     title,
     description,
     dueDate,
