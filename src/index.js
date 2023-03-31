@@ -10,6 +10,8 @@ controllerModule.switchProject(defaultProject);
 const defaultTodo = controllerModule.createTodo(controllerModule.activeProject.todosArray, Todo, 'project one', 'this is project one', new Date(2023, 5, 5), new Date(), 2);
 console.log(defaultTodo);
 
+console.log(controllerModule);
+console.log(controllerModule.activeProject);
 
 /*
 
