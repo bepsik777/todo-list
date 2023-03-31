@@ -63,6 +63,11 @@
     margin-left: 13px;
 }
 
+#project-title.hidden,
+#create-project-button.hidden {
+    display: none;
+}
+
 .projects-list > li {
     font-size: 1rem;
     /* border: 1px solid black; */
@@ -91,10 +96,6 @@ li > p {
     display: none;
 }
 
-.create-todo {
-    position: absolute;
-    right: 20px;
-}
 
 .default-project {
     display: flex;
