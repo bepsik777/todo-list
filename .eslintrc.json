@@ -12,6 +12,7 @@
     },
     "rules": {
         "no-console": "off",
-        "no-multiple-empty-lines": "off"
+        "no-multiple-empty-lines": "off",
+        "no-param-reassign": ["warn", { "props": false } ]
     }
 }

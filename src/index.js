@@ -1,17 +1,20 @@
 import Todo from './todos';
 import projectFactory from './projects';
 import controllerModule from './controller';
+import domController from './dom-controller';
 
-
-
+const domControllerObject = domController();
 const defaultProject = controllerModule.createProject(projectFactory, 'hello', controllerModule.projectsArray);
 controllerModule.switchProject(defaultProject);
+domControllerObject.renderProjectList();
 
 const defaultTodo = controllerModule.createTodo(controllerModule.activeProject.todosArray, Todo, 'project one', 'this is project one', new Date(2023, 5, 5), new Date(), 2);
 console.log(defaultTodo);
 
 console.log(controllerModule);
-console.log(controllerModule.activeProject);
+console.log(controllerModule.projectsArray);
+
+
 
 /*
 
