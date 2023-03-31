@@ -5,8 +5,47 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <header class="header">
+        <h1>ToDo M8</h1>
+    </header>
+    <div class="main-container">
+        <div class="sidebar">
+            <div class="category-container sidebar-container">
+                <div class="category inbox"><span>Inbox</span></div>
+                <div class="category today"><span>Today</span></div>
+                <div class="category upcoming"><span>Upcoming</span></div>
+            </div>
+            <div class="project-container sidebar-container">
+                <!-- <div class="category projects"><span>Projects</span></div> -->
+                <ul class="projects-list">
+                    <h4>Projects <span><button class="create-project">create project</button></span></h4>
+                </ul>
+            </div>
+        </div>
+        <main class="main">
+            <button class="create-todo">Create todo</button>
+            <div class="default-project">
+                <h2 class="project-title">Default Project</h2>
+                <div class="example-todo ">
+                    <div class="check-container">
+                        <input type="checkbox" id="finished" name="finished" >
+                        <span class="checked-description">Checked</span>
+                    </div>
+                    <h3 class="todo-title">Todo Example</h3>
+                    <div class="icons-container"></div>
+                </div>
+                <div class="example-todo active-todo">
+                    <div class="todo-row one"></div>
+                    <div class="todo-row two"></div>
+                    <div class="todo-row three"></div>
+                </div>
+                <div class="example-todo "></div>
+            </div>
+        </main>
+    </div>
     <script src="main.js"></script>
 </body>
 </html>
