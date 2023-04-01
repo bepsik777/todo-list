@@ -8,10 +8,8 @@ const projectManager = () => {
     return newProject;
   }
 
-  const removeProject = (project, container) => {
-    const indexOfProject = container.indexOf(project);
-    container.splice(indexOfProject, 1);
-    project.rendered = false;
+  const removeProject = (projectIndex, container) => {
+    container.splice(projectIndex, 1);
   };
 
   function switchProject(project) {
