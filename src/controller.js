@@ -12,14 +12,12 @@ const projectManager = () => {
     container.splice(projectIndex, 1);
   };
 
-  function switchProject(project) {
-    this.activeProject = project;
+  function switchProject(projectIndex, container) {
+    this.activeProject = container[projectIndex];
   }
 
-  const sayHi = () => console.log('hi!');
 
   return {
-    sayHi,
     createProject,
     removeProject,
     switchProject,

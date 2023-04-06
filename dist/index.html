@@ -28,10 +28,9 @@
             </div>
         </div>
         <main class="main">
-            <button class="create-todo">Create todo</button>
             <div class="default-project">
-                <h2 class="project-title">Default Project</h2>
-                <div class="example-todo ">
+                <h2 class="project-title-h2">Default Project</h2>
+                <!-- <div class="example-todo ">
                     <div class="check-container">
                         <input type="checkbox" id="finished" name="finished" >
                         <span class="checked-description">Checked</span>
@@ -44,7 +43,16 @@
                     <div class="todo-row two"></div>
                     <div class="todo-row three"></div>
                 </div>
-                <div class="example-todo "></div>
+                <div class="example-todo "></div> -->
+                <form action="" class="create-todo">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title">
+                    <label for="description">Description</label>
+                    <input type="text" id="description" name="description">
+                    <label for="end-date">End Date</label>
+                    <input type="date" name="end-date" id="end-date">
+                    <button class="create-todo-button">Create Task</button>
+                </form>
             </div>
         </main>
     </div>

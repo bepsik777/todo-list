@@ -3,24 +3,26 @@ import controllerModule from './controller';
 import projectFactory from './projects';
 
 
-// function render(array, element, whereToAppend) {
-//   array.forEach((item, element) => {
-//     if (item.rendered === false) {
-//       const newElement = document.createElement(element);
-//       newElement.textContent = item.title;
-
-//       whereToAppend.appendChild(newElement);
-//     }
-//   });
-// }
-
-
-const domController = () => {
+const domProjectController = () => {
   const addProjectButton = document.getElementById('create-project-button');
   const createProjectButton = document.querySelector('.add-project');
   const projectTitle = document.getElementById('project-title');
   const projectsList = document.querySelector('.projects-list');
   const deleteButtonArray = [];
+
+  function domCreateProject() {
+    const titleValue = projectTitle.value;
+    controllerModule.createProject(projectFactory, titleValue, controllerModule.projectsArray);
+    projectTitle.value = '';
+
+    console.log(controllerModule.projectsArray);
+  }
+
+  function domSwitchProject(e) {
+    e.target.dataset.id = e.target.nextSibling.dataset.id;
+    controllerModule.switchProject(e.target.dataset.id, controllerModule.projectsArray);
+    console.log(controllerModule.activeProject.title);
+  }
 
   function setDeleteButtonsId() {
     const allButtons = document.querySelectorAll('.delete-project-button');
@@ -41,20 +43,27 @@ const domController = () => {
       deleteButtonArray.splice(e.target.dataset.id, 1);
       e.target.parentNode.remove();
       setDeleteButtonsId();
-      console.log(controllerModule.projectsArray);
-      console.log(e.target.dataset.id);
     });
     return deleteProjectButton;
   };
+
+  function createProjectListParagraph(project) {
+    const listParagraph = document.createElement('p');
+    listParagraph.textContent = project.title;
+    listParagraph.addEventListener('click', (e) => {
+      domSwitchProject(e);
+      renderActiveProject(e);
+    });
+    return listParagraph;
+  }
 
   function renderProjectList() {
     controllerModule.projectsArray.forEach((project) => {
       if (project.rendered === false) {
         const listItem = document.createElement('li');
-        const listParagraph = document.createElement('p');
+        const listParagraph = createProjectListParagraph(project);
         const deleteProjectButton = createDeleteProjectButton(project);
 
-        listParagraph.textContent = project.title;
 
         projectsList.append(listItem);
         listItem.appendChild(listParagraph);
@@ -65,17 +74,14 @@ const domController = () => {
     });
   }
 
-  const domCreateProject = () => {
-    const titleValue = projectTitle.value;
-    controllerModule.createProject(projectFactory, titleValue, controllerModule.projectsArray);
-
-    console.log(controllerModule.projectsArray);
-  };
-
-  // const domSwitchProject
+  function renderActiveProject() {
+    const projectTitleH2 = document.querySelector('.project-title-h2');
+    projectTitleH2.textContent = controllerModule.activeProject.title;
+  }
 
 
   addProjectButton.addEventListener('click', () => {
+    if (projectTitle.value === '') return;
     domCreateProject();
     renderProjectList();
 
@@ -92,16 +98,34 @@ const domController = () => {
     renderProjectList,
   };
 };
-export default domController;
+
+const domTodoController = () => {
+  const titleInput = document.querySelector('#title');
+  const descriptionInput = document.querySelector('#descriptiom');
+  const endDateInput = document.querySelector('#end-date');
+  const createTodoButton = document.querySelector('.create-todo-button');
+
+
+
+  // function domCreateTodo(e) => {
+
+  // }
+
+
+  createTodoButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log(new Date(endDateInput.value));
+  });
+  return {
+
+  };
+};
+
+export default domProjectController;
+export { domTodoController };
+
 
 /*
-WHAT I HAVE:
-- I CAN CREATE PROJECTS BY CLICKING ON THE ADD BUTTON, AND THE TITLE IS TAKEN FROM THE INPUT
-- THE INPUT HIDES WHEN PROJECT CREATED, AND SHOWS WHE 'CREATE PROJECTS'
-- THE POSSIBILITY TO DELETE PROJECTS BY CLICKING A BUTTON
-
-NEXT STEPS:
-- ADD THE POSSIBILITY TO DELETE PROJECTS BY CLICKING A BUTTON
-- SHOULD I REFACTOR MY CODE? SHOULD THE PROJECT OBJECT HAVE A 'RENDERED' PROPERTIE,
-WHICH IS ASSOCIATED TO THE DOM?
+Next step:
+- make a function to create a todo and attach it to the createTodoButton
 */
