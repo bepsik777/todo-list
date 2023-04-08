@@ -8,9 +8,11 @@ const domTodoControllerObject = domTodoController();
 controllerModule.createProject(projectFactory, 'hello', controllerModule.projectsArray);
 controllerModule.switchProject(0, controllerModule.projectsArray);
 domProjectControllerObject.renderProjectList();
+domProjectControllerObject.renderActiveProject();
 
-const defaultTodo = controllerModule.createTodo(controllerModule.activeProject.todosArray, Todo, 'project one', 'this is project one', new Date(2023, 5, 5), new Date(), 2);
+const defaultTodo = controllerModule.createTodo(controllerModule.activeProject.todosArray, Todo, 'project one', 'this is project one', new Date(2023, 5, 5));
 console.log(defaultTodo);
+console.log(controllerModule.activeProject);
 
 
 

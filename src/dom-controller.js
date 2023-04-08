@@ -1,5 +1,5 @@
 import controllerModule from './controller';
-// import Todo from './todos';
+import Todo from './todos';
 import projectFactory from './projects';
 
 
@@ -21,7 +21,7 @@ const domProjectController = () => {
   function domSwitchProject(e) {
     e.target.dataset.id = e.target.nextSibling.dataset.id;
     controllerModule.switchProject(e.target.dataset.id, controllerModule.projectsArray);
-    console.log(controllerModule.activeProject.title);
+    console.log(controllerModule.activeProject);
   }
 
   function setDeleteButtonsId() {
@@ -96,25 +96,33 @@ const domProjectController = () => {
 
   return {
     renderProjectList,
+    renderActiveProject,
   };
 };
 
 const domTodoController = () => {
   const titleInput = document.querySelector('#title');
-  const descriptionInput = document.querySelector('#descriptiom');
+  const descriptionInput = document.querySelector('#description');
   const endDateInput = document.querySelector('#end-date');
   const createTodoButton = document.querySelector('.create-todo-button');
 
 
 
-  // function domCreateTodo(e) => {
+  function domCreateTodo() {
+    const actProjectContainer = controllerModule.activeProject.todosArray;
+    const title = titleInput.value;
+    const description = descriptionInput.value;
+    const date = endDateInput.value;
 
-  // }
+
+    controllerModule.createTodo(actProjectContainer, Todo, title, description, date);
+  }
 
 
   createTodoButton.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log(new Date(endDateInput.value));
+    domCreateTodo();
+    console.log(controllerModule.activeProject);
   });
   return {
 
@@ -127,5 +135,5 @@ export { domTodoController };
 
 /*
 Next step:
-- make a function to create a todo and attach it to the createTodoButton
+- make a function to create a todo and attach it to the createTodoButtonpwd
 */

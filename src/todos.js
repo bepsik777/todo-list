@@ -1,6 +1,6 @@
 
 
-const Todo = (title, description, dueDate, addDate, priority) => {
+const Todo = (title, description, dueDate, priority) => {
   const finished = false;
 
   return {
@@ -8,7 +8,6 @@ const Todo = (title, description, dueDate, addDate, priority) => {
     title,
     description,
     dueDate,
-    addDate,
     priority,
   };
 };
