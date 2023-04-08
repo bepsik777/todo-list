@@ -100,11 +100,14 @@ const domProjectController = () => {
   };
 };
 
+
+
 const domTodoController = () => {
   const titleInput = document.querySelector('#title');
   const descriptionInput = document.querySelector('#description');
   const endDateInput = document.querySelector('#end-date');
   const createTodoButton = document.querySelector('.create-todo-button');
+  const priorityInput = document.querySelector('#priority');
 
 
 
@@ -113,9 +116,10 @@ const domTodoController = () => {
     const title = titleInput.value;
     const description = descriptionInput.value;
     const date = endDateInput.value;
+    const priority = priorityInput.value;
 
 
-    controllerModule.createTodo(actProjectContainer, Todo, title, description, date);
+    controllerModule.createTodo(actProjectContainer, Todo, title, description, date, priority);
   }
 
 

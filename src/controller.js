@@ -25,8 +25,8 @@ const projectManager = () => {
 };
 
 const todoManager = () => {
-  const createTodo = (activeContainer, factory, title, description, dueDate, addDate, priority) => {
-    const newTodo = factory(title, description, dueDate, addDate, priority);
+  const createTodo = (activeContainer, factory, title, description, dueDate, priority) => {
+    const newTodo = factory(title, description, dueDate, priority);
     // Automatically push the todo into the active project
     activeContainer.push(newTodo);
     return newTodo;
