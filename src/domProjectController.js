@@ -1,6 +1,6 @@
 import controllerModule from './controller';
-import Todo from './todos';
 import projectFactory from './projects';
+import domTodoController from './domTodoController';
 
 
 const domProjectController = () => {
@@ -8,23 +8,25 @@ const domProjectController = () => {
   const createProjectButton = document.querySelector('.add-project');
   const projectTitle = document.getElementById('project-title');
   const projectsList = document.querySelector('.projects-list');
+  const createTodoButton = document.querySelector('.create-todo-button');
   const deleteButtonArray = [];
 
   function domCreateProject() {
     const titleValue = projectTitle.value;
     controllerModule.createProject(projectFactory, titleValue, controllerModule.projectsArray);
-    projectTitle.value = '';
 
     console.log(controllerModule.projectsArray);
   }
 
   function domSwitchProject(e) {
+    // dynamically set id when list item clicked
     e.target.dataset.id = e.target.nextSibling.dataset.id;
     controllerModule.switchProject(e.target.dataset.id, controllerModule.projectsArray);
     console.log(controllerModule.activeProject);
   }
 
   function setDeleteButtonsId() {
+    // push button to button array, and button index is the same as coresponding project index
     const allButtons = document.querySelectorAll('.delete-project-button');
     allButtons.forEach((button) => {
       button.dataset.id = deleteButtonArray.indexOf(button);
@@ -75,14 +77,26 @@ const domProjectController = () => {
   }
 
   function renderActiveProject() {
-    const projectTitleH2 = document.querySelector('.project-title-h2');
-    projectTitleH2.textContent = controllerModule.activeProject.title;
+    const main = document.querySelector('.main');
+    const currentRenderedProject = document.querySelector('.active-project');
+    const newRenderedProject = document.createElement('div');
+    const title = document.createElement('h2');
+
+    currentRenderedProject.remove();
+    newRenderedProject.classList.add('active-project');
+    title.textContent = controllerModule.activeProject.title;
+
+    main.appendChild(newRenderedProject);
+    newRenderedProject.appendChild(title);
+
+    domTodoController.renderTodos();
   }
 
 
   addProjectButton.addEventListener('click', () => {
     if (projectTitle.value === '') return;
     domCreateProject();
+    projectTitle.value = '';
     renderProjectList();
 
     addProjectButton.classList.toggle('hidden');
@@ -94,6 +108,12 @@ const domProjectController = () => {
     projectTitle.classList.toggle('hidden');
   });
 
+  createTodoButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    domTodoController.domCreateTodo();
+    renderActiveProject();
+  });
+
   return {
     renderProjectList,
     renderActiveProject,
@@ -101,43 +121,9 @@ const domProjectController = () => {
 };
 
 
-
-const domTodoController = () => {
-  const titleInput = document.querySelector('#title');
-  const descriptionInput = document.querySelector('#description');
-  const endDateInput = document.querySelector('#end-date');
-  const createTodoButton = document.querySelector('.create-todo-button');
-  const priorityInput = document.querySelector('#priority');
-
-
-
-  function domCreateTodo() {
-    const actProjectContainer = controllerModule.activeProject.todosArray;
-    const title = titleInput.value;
-    const description = descriptionInput.value;
-    const date = endDateInput.value;
-    const priority = priorityInput.value;
-
-
-    controllerModule.createTodo(actProjectContainer, Todo, title, description, date, priority);
-  }
-
-
-  createTodoButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    domCreateTodo();
-    console.log(controllerModule.activeProject);
-  });
-  return {
-
-  };
-};
-
 export default domProjectController;
-export { domTodoController };
 
 
 /*
-Next step:
-- make a function to create a todo and attach it to the createTodoButtonpwd
+
 */

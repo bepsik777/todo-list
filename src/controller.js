@@ -32,9 +32,8 @@ const todoManager = () => {
     return newTodo;
   };
 
-  const removeTodo = (todo, container) => {
-    const indexOfTodo = container.indexOf(todo);
-    container.splice(indexOfTodo, 1);
+  const removeTodo = (todoIndex, container) => {
+    container.splice(todoIndex, 1);
   };
 
   return {
