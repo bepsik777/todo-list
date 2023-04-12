@@ -98,7 +98,9 @@ li > p {
 }
 
 
-.default-project {
+
+.active-project {
+    background-color: blueviolet;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -110,7 +112,7 @@ li > p {
 }
 
 .create-todo {
-    height: 70%;
+    height: 50%;
     /* border: 1px solid black; */
     display: flex;
     flex-direction: column;
@@ -118,7 +120,7 @@ li > p {
 }
 
 #description {
-    height: 60%;
+    height: 30%;
 }
 
 #end-date {
