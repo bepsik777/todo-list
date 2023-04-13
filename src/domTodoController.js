@@ -40,6 +40,28 @@ const domTodoController = (() => {
     return deleteTodoButton;
   }
 
+  function expandTodo(e) {
+    const todo = e.target.parentElement.parentElement;
+    todo.classList.toggle('active-todo');
+    console.log(todo.classList);
+    // if (todo.classList.contains('active-todo')) {
+    //   const todoExtension = document.createElement('div');
+    //   todoExtension.classList.add('todo-extension');
+    // }
+  }
+
+  function createExpandButton() {
+    const expandButton = document.createElement('button');
+    expandButton.textContent = '↓';
+    expandButton.classList.add('expand-button');
+
+    expandButton.addEventListener('click', (e) => {
+      e.target.dataset.id = e.target.parentElement.parentElement.dataset.id;
+      expandTodo(e);
+    });
+    return expandButton;
+  }
+
   function renderTodos() {
     const renderedTodos = document.querySelectorAll('.example-todo');
     renderedTodos.forEach((todo) => {
@@ -53,6 +75,7 @@ const domTodoController = (() => {
       const todoTitle = document.createElement('h3');
       const iconsContainer = document.createElement('div');
       const deleteTodoButton = createDeleteTodoButton();
+      const expandButton = createExpandButton();
 
       todoWrapper.classList.add('example-todo');
       todoWrapper.dataset.id = controllerModule.activeProject.todosArray.indexOf(todo);
@@ -70,6 +93,7 @@ const domTodoController = (() => {
       todoWrapper.append(checkBoxWrapper, todoTitle, iconsContainer);
       checkBoxWrapper.append(checkBox);
       iconsContainer.append(deleteTodoButton);
+      iconsContainer.append(expandButton);
     });
     console.log(controllerModule.activeProject.todosArray);
   }
@@ -82,3 +106,9 @@ const domTodoController = (() => {
 })();
 
 export default domTodoController;
+
+
+/*
+Next step:
+- Add the possibility to expand todos
+*/
