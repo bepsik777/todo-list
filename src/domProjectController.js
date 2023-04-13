@@ -41,10 +41,17 @@ const domProjectController = () => {
     deleteProjectButton.dataset.id = deleteButtonArray.indexOf(deleteProjectButton);
 
     deleteProjectButton.addEventListener('click', (e) => {
+      const renderedProject = document.querySelector('.active-project');
+
+      if (controllerModule.projectsArray[e.target.dataset.id] === controllerModule.activeProject) {
+        renderedProject.remove();
+      }
       controllerModule.removeProject(e.target.dataset.id, controllerModule.projectsArray);
       deleteButtonArray.splice(e.target.dataset.id, 1);
       e.target.parentNode.remove();
+
       setDeleteButtonsId();
+      console.log(controllerModule.projectsArray);
     });
     return deleteProjectButton;
   };
@@ -55,6 +62,7 @@ const domProjectController = () => {
     listParagraph.addEventListener('click', (e) => {
       domSwitchProject(e);
       renderActiveProject(e);
+      console.log(controllerModule.activeProject);
     });
     return listParagraph;
   }
@@ -81,10 +89,14 @@ const domProjectController = () => {
     const currentRenderedProject = document.querySelector('.active-project');
     const newRenderedProject = document.createElement('div');
     const title = document.createElement('h2');
-
-    currentRenderedProject.remove();
+    console.log(currentRenderedProject);
+    if (currentRenderedProject !== null) {
+      currentRenderedProject.remove();
+    }
+    if (controllerModule.activeProject === undefined) return;
     newRenderedProject.classList.add('active-project');
     title.textContent = controllerModule.activeProject.title;
+    title.classList.add('rendered-project-title');
 
     main.appendChild(newRenderedProject);
     newRenderedProject.appendChild(title);
@@ -125,5 +137,7 @@ export default domProjectController;
 
 
 /*
-
+  delete project button don't act as expected. when deleting, project unrender even when removed proect is not the active project.
+  furthermore, after deleting, when clicking on another project, program won't rerender and throw error.
+  I think that this issue is in the renderActiveProject function
 */

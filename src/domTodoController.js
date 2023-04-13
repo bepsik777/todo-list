@@ -31,7 +31,7 @@ const domTodoController = (() => {
 
     deleteTodoButton.addEventListener('click', (e) => {
       e.target.dataset.id = e.target.parentElement.parentElement.dataset.id; // dynamically set id
-      const buttonId = e.target.dataset;
+      const buttonId = e.target.dataset.id;
       controllerModule.activeProject.todosArray.splice(buttonId, 1);
       renderTodos();
       console.log(e.target.dataset.id);
@@ -40,7 +40,7 @@ const domTodoController = (() => {
     return deleteTodoButton;
   }
 
-  function renderTodos() { // i think i will have to change it to render all todos
+  function renderTodos() {
     const renderedTodos = document.querySelectorAll('.example-todo');
     renderedTodos.forEach((todo) => {
       todo.remove();
