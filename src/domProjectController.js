@@ -89,7 +89,7 @@ const domProjectController = () => {
     const currentRenderedProject = document.querySelector('.active-project');
     const newRenderedProject = document.createElement('div');
     const title = document.createElement('h2');
-    console.log(currentRenderedProject);
+    // console.log(currentRenderedProject);
     if (currentRenderedProject !== null) {
       currentRenderedProject.remove();
     }

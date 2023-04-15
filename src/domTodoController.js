@@ -1,5 +1,7 @@
+import { format } from 'date-fns';
 import controllerModule from './controller';
 import Todo from './todos';
+
 
 const domTodoController = (() => {
   const titleInput = document.querySelector('#title');
@@ -15,7 +17,7 @@ const domTodoController = (() => {
     const actProjectContainer = controllerModule.activeProject.todosArray;
     const title = titleInput.value;
     const description = descriptionInput.value;
-    const date = endDateInput.value;
+    const date = format(new Date(endDateInput.value), 'MM/dd/yyyy');
     const priority = priorityInput.value;
 
 
@@ -73,15 +75,18 @@ const domTodoController = (() => {
       // get some of the existing elemnts, to replace them after
       const editButton = todoWrapper.querySelector('.edit-button');
       const domTodoTitle = todoWrapper.querySelector('.todo-title');
+      const domTodoDate = todoWrapper.querySelector('.date-paragraph');
       // const expandButton = todoWrapper.querySelector('.expand-button');
 
       // create the new elements, to be able to edit todo
       const editTitleField = document.createElement('input');
       editTitleField.type = 'text';
-      editTitleField.placeholder = domTodoTitle.textContent;
+      editTitleField.maxLength = 32;
+      editTitleField.value = editedTodo.title;
 
       const editDescriptionField = document.createElement('textarea');
       editDescriptionField.classList.add('edit-description');
+      editDescriptionField.value = editedTodo.description;
       editDescriptionField.maxLength = 150;
 
       const editPriorityField = document.createElement('select');
@@ -97,10 +102,16 @@ const domTodoController = (() => {
       highOption.textContent = 'High';
       editPriorityField.append(lowOption, mediumOption, highOption);
 
+      const editDueDateField = document.createElement('input');
+      editDueDateField.type = 'date';
+      console.log(new Date(editedTodo.dueDate));
+      console.log(format(new Date(editedTodo.dueDate), 'yyyy-MM-dd'));
+      editDueDateField.value = format(new Date(editedTodo.dueDate), 'yyyy-MM-dd');
+
       const saveButton = document.createElement('button');
       saveButton.textContent = 's';
       saveButton.addEventListener('click', () => {
-        controllerModule.editTodo(editedTodo, editTitleField.value, editDescriptionField.value, editPriorityField.value);
+        controllerModule.editTodo(editedTodo, editTitleField.value, editDescriptionField.value, format(new Date(editDueDateField.value), 'MM/dd/yyyy'), editPriorityField.value);
         renderTodos();
       });
 
@@ -108,8 +119,9 @@ const domTodoController = (() => {
       todoWrapper.append(editDescriptionField, editPriorityField);
       domTodoTitle.replaceWith(editTitleField);
       editButton.replaceWith(saveButton);
-      console.log(editTitleField);
-      console.log(editedTodo);
+      domTodoDate.replaceWith(editDueDateField);
+      // console.log(editTitleField);
+      // console.log(editedTodo);
       e.target.textContent = 's';
     } else if (!todoWrapper.classList.contains('edited-todo')) {
       e.target.textContent = 'e';
@@ -152,6 +164,7 @@ const domTodoController = (() => {
       const checkBoxWrapper = document.createElement('div');
       const checkBox = document.createElement('input');
       const todoTitle = document.createElement('h3');
+      const dueDate = document.createElement('p');
       const iconsContainer = document.createElement('div');
       const deleteTodoButton = createDeleteTodoButton();
       const editButton = createEditButton();
@@ -162,21 +175,25 @@ const domTodoController = (() => {
       checkBoxWrapper.classList.add('check-container');
       todoTitle.classList.add('todo-title');
       iconsContainer.classList.add('icons-container');
+      dueDate.classList.add('date-paragraph');
 
       checkBox.id = 'finished';
       checkBox.type = 'checkbox';
       checkBox.name = 'checkbox';
 
       todoTitle.textContent = todo.title;
+      dueDate.textContent = todo.dueDate;
 
       renderedProject.append(todoWrapper);
-      todoWrapper.append(checkBoxWrapper, todoTitle, iconsContainer);
+      todoWrapper.append(checkBoxWrapper, todoTitle, dueDate, iconsContainer);
       checkBoxWrapper.append(checkBox);
       iconsContainer.append(deleteTodoButton);
       iconsContainer.append(editButton);
       iconsContainer.append(expandButton);
+
+      console.log(todo.dueDate);
     });
-    console.log(controllerModule.activeProject.todosArray);
+    // console.log(controllerModule.activeProject.todosArray);
   }
 
 

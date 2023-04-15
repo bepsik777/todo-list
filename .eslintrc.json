@@ -15,6 +15,7 @@
         "no-multiple-empty-lines": "off",
         "no-param-reassign": ["warn", { "props": false } ],
         "no-use-before-define": ["error", {"functions": false}],
-        "max-len": "off"
+        "max-len": "off",
+        "import/no-extraneous-dependencies": "off"
     }
 }

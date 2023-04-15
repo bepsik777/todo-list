@@ -36,9 +36,10 @@ const todoManager = () => {
     container.splice(todoIndex, 1);
   };
 
-  const editTodo = (todo, title, description, priority) => {
+  const editTodo = (todo, title, description, dueDate, priority) => {
     todo.title = title;
     todo.description = description;
+    todo.dueDate = dueDate;
     todo.priority = priority;
   };
 
