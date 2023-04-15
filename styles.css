@@ -13,7 +13,8 @@
 
 .main-container {
     display: flex;
-    height: 90vh;
+    min-height: 90vh;
+    max-width: 100vw;
 }
 
 /* SIDEBAR */
@@ -88,10 +89,10 @@ li > p {
 
 .main {
     position: relative;
-    height: 100%;
+    min-height: 90vh;
     width: 85%;
     padding: 20px 0;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     display: flex;
     justify-content: center;
     /* display: none; */
@@ -106,7 +107,7 @@ li > p {
     height: 100%;
     width: 60%;
     padding: 10px 0;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     align-items: center;
     gap: 10px;
 }
@@ -136,7 +137,8 @@ li > p {
     height: 3rem;
 }
 
-.example-todo.active-todo {
+.example-todo.active-todo,
+.example-todo.edited-todo {
     height: 9rem;
     grid-template-rows: repeat(3, 1fr) ;
 }
@@ -144,12 +146,6 @@ li > p {
 .example-todo > * {
     border: 1px solid black;
 }
-
-.todo-title {
-    height: 25px;
-    grid-column: 2;
-}
-
 
 .check-container {
     height: 25px;
@@ -173,12 +169,17 @@ input[type="checkbox"] {
     box-shadow: inset 0 0 0 10px red;
   }
 
-  .checked-description {
+.todo-title {
+    height: 25px;
+    grid-column: 2;
+}
+
+.checked-description {
     display: inline-block;
     margin-left: 10px;
   }
 
-  .icons-container {
+.icons-container {
     border: 1px solid black;
     grid-column: 4;
     grid-row: 1;
@@ -189,8 +190,20 @@ input[type="checkbox"] {
     height: 25px;
   }
 
+.description,
+.edit-description {
+    height: 100%;
+    grid-row: 2/4;
+    grid-column: 1/3;
+}
 
-.todo-row {
+.priority-wrapper,
+.edit-priority {
+    grid-row: 2/4;
+    grid-column: 4;
+}
+
+/* .todo-row {
     min-height: 100%;
     width: 100%;
     border: 1px solid black;
@@ -207,4 +220,4 @@ input[type="checkbox"] {
 .todo-row.three {
     grid-row: 3;
 }
-
+ */
