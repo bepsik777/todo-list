@@ -41,13 +41,79 @@ const domTodoController = (() => {
   }
 
   function expandTodo(e) {
-    const todo = e.target.parentElement.parentElement;
-    todo.classList.toggle('active-todo');
-    console.log(todo.classList);
-    // if (todo.classList.contains('active-todo')) {
-    //   const todoExtension = document.createElement('div');
-    //   todoExtension.classList.add('todo-extension');
-    // }
+    const todoWrapper = e.target.parentElement.parentElement;
+    todoWrapper.classList.toggle('active-todo');
+    if (todoWrapper.classList.contains('active-todo') === true) {
+      const descriptionWrapper = document.createElement('div');
+      const description = document.createElement('p');
+      const priorityWrapper = document.createElement('div');
+      descriptionWrapper.classList.add('description');
+      priorityWrapper.classList.add('priority-wrapper');
+
+      description.textContent = controllerModule.activeProject.todosArray[todoWrapper.dataset.id].description;
+      priorityWrapper.textContent = controllerModule.activeProject.todosArray[todoWrapper.dataset.id].priority;
+
+      todoWrapper.append(descriptionWrapper);
+      todoWrapper.append(priorityWrapper);
+      descriptionWrapper.append(description);
+    } else if (todoWrapper.classList.contains('active-todo') === false) {
+      const descriptionWrapper = document.querySelector('.description');
+      const priorityWrapper = document.querySelector('.priority-wrapper');
+
+      descriptionWrapper.remove();
+      priorityWrapper.remove();
+    }
+  }
+
+  function editTodo(e) {
+    const todoWrapper = e.target.parentElement.parentElement;
+    const editedTodo = controllerModule.activeProject.todosArray[todoWrapper.dataset.id];
+    todoWrapper.classList.toggle('edited-todo');
+    if (todoWrapper.classList.contains('edited-todo')) {
+      // get some of the existing elemnts, to replace them after
+      const editButton = todoWrapper.querySelector('.edit-button');
+      const domTodoTitle = todoWrapper.querySelector('.todo-title');
+      // const expandButton = todoWrapper.querySelector('.expand-button');
+
+      // create the new elements, to be able to edit todo
+      const editTitleField = document.createElement('input');
+      editTitleField.type = 'text';
+      editTitleField.placeholder = domTodoTitle.textContent;
+
+      const editDescriptionField = document.createElement('textarea');
+      editDescriptionField.classList.add('edit-description');
+      editDescriptionField.maxLength = 150;
+
+      const editPriorityField = document.createElement('select');
+      editPriorityField.classList.add('edit-priority');
+      const lowOption = document.createElement('option');
+      lowOption.value = 0;
+      lowOption.textContent = 'Low';
+      const mediumOption = document.createElement('option');
+      mediumOption.value = 1;
+      mediumOption.textContent = 'Medium';
+      const highOption = document.createElement('option');
+      highOption.value = 2;
+      highOption.textContent = 'High';
+      editPriorityField.append(lowOption, mediumOption, highOption);
+
+      const saveButton = document.createElement('button');
+      saveButton.textContent = 's';
+      saveButton.addEventListener('click', () => {
+        controllerModule.editTodo(editedTodo, editTitleField.value, editDescriptionField.value, editPriorityField.value);
+        renderTodos();
+      });
+
+
+      todoWrapper.append(editDescriptionField, editPriorityField);
+      domTodoTitle.replaceWith(editTitleField);
+      editButton.replaceWith(saveButton);
+      console.log(editTitleField);
+      console.log(editedTodo);
+      e.target.textContent = 's';
+    } else if (!todoWrapper.classList.contains('edited-todo')) {
+      e.target.textContent = 'e';
+    }
   }
 
   function createExpandButton() {
@@ -60,6 +126,19 @@ const domTodoController = (() => {
       expandTodo(e);
     });
     return expandButton;
+  }
+
+  function createEditButton() {
+    const editButton = document.createElement('button');
+    editButton.textContent = 'e';
+    editButton.classList.add('edit-button');
+
+    editButton.addEventListener('click', (e) => {
+      console.log('hello, i am edit piath');
+      editTodo(e);
+    });
+
+    return editButton;
   }
 
   function renderTodos() {
@@ -75,6 +154,7 @@ const domTodoController = (() => {
       const todoTitle = document.createElement('h3');
       const iconsContainer = document.createElement('div');
       const deleteTodoButton = createDeleteTodoButton();
+      const editButton = createEditButton();
       const expandButton = createExpandButton();
 
       todoWrapper.classList.add('example-todo');
@@ -93,6 +173,7 @@ const domTodoController = (() => {
       todoWrapper.append(checkBoxWrapper, todoTitle, iconsContainer);
       checkBoxWrapper.append(checkBox);
       iconsContainer.append(deleteTodoButton);
+      iconsContainer.append(editButton);
       iconsContainer.append(expandButton);
     });
     console.log(controllerModule.activeProject.todosArray);
@@ -110,5 +191,5 @@ export default domTodoController;
 
 /*
 Next step:
-- Add the possibility to expand todos
+- Add the possibility to edit todo
 */
