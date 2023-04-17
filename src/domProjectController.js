@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import controllerModule from './controller';
 import projectFactory from './projects';
 import domTodoController from './domTodoController';
@@ -10,6 +11,8 @@ const domProjectController = () => {
   const projectsList = document.querySelector('.projects-list');
   const createTodoButton = document.querySelector('.create-todo-button');
   const deleteButtonArray = [];
+  const inboxButton = document.querySelector('.category.inbox');
+  const todayButton = document.querySelector('.category.today');
 
   function domCreateProject() {
     const titleValue = projectTitle.value;
@@ -61,7 +64,7 @@ const domProjectController = () => {
     listParagraph.textContent = project.title;
     listParagraph.addEventListener('click', (e) => {
       domSwitchProject(e);
-      renderActiveProject(e);
+      renderProject(project);
       console.log(controllerModule.activeProject);
     });
     return listParagraph;
@@ -84,7 +87,8 @@ const domProjectController = () => {
     });
   }
 
-  function renderActiveProject() {
+  function renderProject(project) {
+    // const project = controllerModule.activeProject;
     const main = document.querySelector('.main');
     const currentRenderedProject = document.querySelector('.active-project');
     const newRenderedProject = document.createElement('div');
@@ -101,9 +105,39 @@ const domProjectController = () => {
     main.appendChild(newRenderedProject);
     newRenderedProject.appendChild(title);
 
-    domTodoController.renderTodos();
+    domTodoController.renderTodos(project);
   }
 
+  function renderInbox() {
+    const allTodos = {
+      todosArray: [],
+    };
+    controllerModule.projectsArray.forEach((project) => {
+      allTodos.todosArray.push(...project.todosArray);
+    });
+    console.log(allTodos);
+    renderProject(allTodos);
+    // const editButtons = document.querySelectorAll('.edit-button');
+    // const deleteButtons = document.querySelectorAll('.delete-todo-button');
+    // editButtons.forEach((button) => button.remove());
+    // deleteButtons.forEach((button) => button.remove());
+  }
+
+  function renderTodayTodos() {
+    const allTodos = [];
+    const todayTodos = {
+      todosArray: [],
+    };
+    const todayDate = format(new Date(), 'MMM/dd/yyyy');
+    controllerModule.projectsArray.forEach((project) => {
+      allTodos.push(...project.todosArray);
+    });
+    allTodos.forEach((todo) => {
+      if (todo.dueDate === todayDate) todayTodos.todosArray.push(todo);
+    });
+    console.log(todayTodos.todosArray);
+    renderProject(todayTodos);
+  }
 
   addProjectButton.addEventListener('click', () => {
     if (projectTitle.value === '') return;
@@ -123,12 +157,15 @@ const domProjectController = () => {
   createTodoButton.addEventListener('click', (e) => {
     e.preventDefault();
     domTodoController.domCreateTodo();
-    renderActiveProject();
+    renderProject(controllerModule.activeProject);
   });
+
+  inboxButton.addEventListener('click', renderInbox);
+  todayButton.addEventListener('click', renderTodayTodos);
 
   return {
     renderProjectList,
-    renderActiveProject,
+    renderActiveProject: renderProject,
   };
 };
 
@@ -137,7 +174,10 @@ export default domProjectController;
 
 
 /*
-  delete project button don't act as expected. when deleting, project unrender even when removed proect is not the active project.
-  furthermore, after deleting, when clicking on another project, program won't rerender and throw error.
-  I think that this issue is in the renderActiveProject function
+Inbox and Today renders, but all the edit, deleteButton and expand buttons bugs, because the rerender
+the active project, and inbox and today are not projects, therefore they don't change the active project
+(actually it is the case for delete and edit buttons, i don't know yet why expand button don't show
+information on non active project todos.)
+The title does not change, but that should be easy to fix
+
 */

@@ -143,9 +143,9 @@ li > p {
     grid-template-rows: repeat(3, 1fr) ;
 }
 
-.example-todo > * {
+/* .example-todo > * {
     border: 1px solid black;
-}
+} */
 
 .check-container {
     height: 25px;
@@ -180,7 +180,7 @@ input[type="checkbox"] {
   }
 
 .icons-container {
-    border: 1px solid black;
+    /* border: 1px solid black; */
     grid-column: 4;
     grid-row: 1;
     justify-self: end;

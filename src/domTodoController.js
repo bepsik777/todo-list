@@ -17,11 +17,13 @@ const domTodoController = (() => {
     const actProjectContainer = controllerModule.activeProject.todosArray;
     const title = titleInput.value;
     const description = descriptionInput.value;
-    const date = format(new Date(endDateInput.value), 'MM/dd/yyyy');
+    const date = format(new Date(endDateInput.value), 'MMM/dd/yyyy');
     const priority = priorityInput.value;
 
 
     controllerModule.createTodo(actProjectContainer, Todo, title, description, date, priority);
+    // newTodo.projectId = controllerModule.projectsArray.indexOf(controllerModule.activeProject);
+    // console.log(newTodo.projectId);
   }
 
   function createDeleteTodoButton() {
@@ -35,14 +37,14 @@ const domTodoController = (() => {
       e.target.dataset.id = e.target.parentElement.parentElement.dataset.id; // dynamically set id
       const buttonId = e.target.dataset.id;
       controllerModule.activeProject.todosArray.splice(buttonId, 1);
-      renderTodos();
+      renderTodos(controllerModule.activeProject);
       console.log(e.target.dataset.id);
     });
 
     return deleteTodoButton;
   }
 
-  function expandTodo(e) {
+  function expandTodo(e, todo) {
     const todoWrapper = e.target.parentElement.parentElement;
     todoWrapper.classList.toggle('active-todo');
     if (todoWrapper.classList.contains('active-todo') === true) {
@@ -52,8 +54,8 @@ const domTodoController = (() => {
       descriptionWrapper.classList.add('description');
       priorityWrapper.classList.add('priority-wrapper');
 
-      description.textContent = controllerModule.activeProject.todosArray[todoWrapper.dataset.id].description;
-      priorityWrapper.textContent = controllerModule.activeProject.todosArray[todoWrapper.dataset.id].priority;
+      description.textContent = todo.description;
+      priorityWrapper.textContent = todo.priority;
 
       todoWrapper.append(descriptionWrapper);
       todoWrapper.append(priorityWrapper);
@@ -70,13 +72,14 @@ const domTodoController = (() => {
   function editTodo(e) {
     const todoWrapper = e.target.parentElement.parentElement;
     const editedTodo = controllerModule.activeProject.todosArray[todoWrapper.dataset.id];
+    console.log(editedTodo);
+    const expandButton = todoWrapper.querySelector('.expand-button');
     todoWrapper.classList.toggle('edited-todo');
     if (todoWrapper.classList.contains('edited-todo')) {
       // get some of the existing elemnts, to replace them after
       const editButton = todoWrapper.querySelector('.edit-button');
       const domTodoTitle = todoWrapper.querySelector('.todo-title');
       const domTodoDate = todoWrapper.querySelector('.date-paragraph');
-      // const expandButton = todoWrapper.querySelector('.expand-button');
 
       // create the new elements, to be able to edit todo
       const editTitleField = document.createElement('input');
@@ -111,31 +114,31 @@ const domTodoController = (() => {
       const saveButton = document.createElement('button');
       saveButton.textContent = 's';
       saveButton.addEventListener('click', () => {
-        controllerModule.editTodo(editedTodo, editTitleField.value, editDescriptionField.value, format(new Date(editDueDateField.value), 'MM/dd/yyyy'), editPriorityField.value);
-        renderTodos();
+        controllerModule.editTodo(editedTodo, editTitleField.value, editDescriptionField.value, format(new Date(editDueDateField.value), 'MMM/dd/yyyy'), editPriorityField.value);
+        renderTodos(controllerModule.activeProject);
       });
+
+      expandButton.disabled = true;
 
 
       todoWrapper.append(editDescriptionField, editPriorityField);
       domTodoTitle.replaceWith(editTitleField);
       editButton.replaceWith(saveButton);
       domTodoDate.replaceWith(editDueDateField);
-      // console.log(editTitleField);
-      // console.log(editedTodo);
-      e.target.textContent = 's';
     } else if (!todoWrapper.classList.contains('edited-todo')) {
-      e.target.textContent = 'e';
+      expandButton.disabled = false;
     }
   }
 
-  function createExpandButton() {
+  function createExpandButton(todo) {
     const expandButton = document.createElement('button');
     expandButton.textContent = '↓';
     expandButton.classList.add('expand-button');
 
     expandButton.addEventListener('click', (e) => {
+      // dynamically set id
       e.target.dataset.id = e.target.parentElement.parentElement.dataset.id;
-      expandTodo(e);
+      expandTodo(e, todo);
     });
     return expandButton;
   }
@@ -153,13 +156,13 @@ const domTodoController = (() => {
     return editButton;
   }
 
-  function renderTodos() {
+  function renderTodos(project) {
     const renderedTodos = document.querySelectorAll('.example-todo');
     renderedTodos.forEach((todo) => {
       todo.remove();
     });
     const renderedProject = document.querySelector('.active-project');
-    controllerModule.activeProject.todosArray.forEach((todo) => {
+    project.todosArray.forEach((todo) => {
       const todoWrapper = document.createElement('div');
       const checkBoxWrapper = document.createElement('div');
       const checkBox = document.createElement('input');
@@ -168,10 +171,14 @@ const domTodoController = (() => {
       const iconsContainer = document.createElement('div');
       const deleteTodoButton = createDeleteTodoButton();
       const editButton = createEditButton();
-      const expandButton = createExpandButton();
+      const expandButton = createExpandButton(todo);
+      // const projectOfTodo = controllerModule.projectsArray.filter(project.includes(todo));
+      // console.log(projectOfTodo);
 
       todoWrapper.classList.add('example-todo');
       todoWrapper.dataset.id = controllerModule.activeProject.todosArray.indexOf(todo);
+      todoWrapper.dataset.projectId = controllerModule.projectsArray.indexOf(project);
+      // console.log(todoWrapper.dataset.projectId);
       checkBoxWrapper.classList.add('check-container');
       todoTitle.classList.add('todo-title');
       iconsContainer.classList.add('icons-container');
@@ -180,6 +187,17 @@ const domTodoController = (() => {
       checkBox.id = 'finished';
       checkBox.type = 'checkbox';
       checkBox.name = 'checkbox';
+      if (todo.finished === 'yes') checkBox.checked = true;
+      if (todo.finished === 'no') checkBox.checked = false;
+      checkBox.addEventListener('click', () => {
+        if (checkBox.checked === true) {
+          todo.finished = 'yes';
+          console.log(todo);
+        } else if (checkBox.checked === false) {
+          todo.finished = 'no';
+          console.log(todo);
+        }
+      });
 
       todoTitle.textContent = todo.title;
       dueDate.textContent = todo.dueDate;
@@ -196,17 +214,26 @@ const domTodoController = (() => {
     // console.log(controllerModule.activeProject.todosArray);
   }
 
+  function renderAllTodos() {
+    const renderedTodos = document.querySelectorAll('.example-todo');
+    renderedTodos.forEach((todo) => {
+      todo.remove();
+    });
+    const allTodos = [];
+    controllerModule.projectsArray.forEach((project) => {
+      allTodos.push(...project.todosArray);
+    });
+    console.log(allTodos);
+  }
+
 
   return {
     renderTodos,
     domCreateTodo,
+    renderAllTodos,
   };
 })();
 
 export default domTodoController;
 
 
-/*
-Next step:
-- Add the possibility to edit todo
-*/

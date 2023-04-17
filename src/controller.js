@@ -1,6 +1,5 @@
 
 
-
 const projectManager = () => {
   function createProject(factory, title, container) {
     const newProject = factory(title);
@@ -25,10 +24,10 @@ const projectManager = () => {
 };
 
 const todoManager = () => {
-  const createTodo = (activeContainer, factory, title, description, dueDate, priority) => {
+  const createTodo = (activeProject, factory, title, description, dueDate, priority) => {
     const newTodo = factory(title, description, dueDate, priority);
     // Automatically push the todo into the active project
-    activeContainer.push(newTodo);
+    activeProject.push(newTodo);
     return newTodo;
   };
 
@@ -62,6 +61,7 @@ const controllerModule = (() => {
     ...todoManager(),
   };
 })();
+
 
 
 
