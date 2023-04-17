@@ -13,6 +13,8 @@ const domProjectController = () => {
   const deleteButtonArray = [];
   const inboxButton = document.querySelector('.category.inbox');
   const todayButton = document.querySelector('.category.today');
+  const form = document.querySelector('.create-todo');
+
 
   function domCreateProject() {
     const titleValue = projectTitle.value;
@@ -43,6 +45,7 @@ const domProjectController = () => {
     deleteProjectButton.classList.add('delete-project-button');
     deleteProjectButton.dataset.id = deleteButtonArray.indexOf(deleteProjectButton);
 
+
     deleteProjectButton.addEventListener('click', (e) => {
       const renderedProject = document.querySelector('.active-project');
 
@@ -65,7 +68,7 @@ const domProjectController = () => {
     listParagraph.addEventListener('click', (e) => {
       domSwitchProject(e);
       renderProject(project);
-      console.log(controllerModule.activeProject);
+      if (form.classList.contains('hidden')) form.classList.toggle('hidden');
     });
     return listParagraph;
   }
@@ -117,10 +120,10 @@ const domProjectController = () => {
     });
     console.log(allTodos);
     renderProject(allTodos);
-    // const editButtons = document.querySelectorAll('.edit-button');
-    // const deleteButtons = document.querySelectorAll('.delete-todo-button');
-    // editButtons.forEach((button) => button.remove());
-    // deleteButtons.forEach((button) => button.remove());
+    const title = document.querySelector('.rendered-project-title');
+    title.textContent = 'Inbox';
+    if (!form.classList.contains('hidden')) form.classList.toggle('hidden');
+    console.log(form.classList);
   }
 
   function renderTodayTodos() {
@@ -137,6 +140,8 @@ const domProjectController = () => {
     });
     console.log(todayTodos.todosArray);
     renderProject(todayTodos);
+    const title = document.querySelector('.rendered-project-title');
+    title.textContent = 'Today';
   }
 
   addProjectButton.addEventListener('click', () => {
@@ -174,10 +179,5 @@ export default domProjectController;
 
 
 /*
-Inbox and Today renders, but all the edit, deleteButton and expand buttons bugs, because the rerender
-the active project, and inbox and today are not projects, therefore they don't change the active project
-(actually it is the case for delete and edit buttons, i don't know yet why expand button don't show
-information on non active project todos.)
-The title does not change, but that should be easy to fix
 
 */

@@ -22,8 +22,6 @@ const domTodoController = (() => {
 
 
     controllerModule.createTodo(actProjectContainer, Todo, title, description, date, priority);
-    // newTodo.projectId = controllerModule.projectsArray.indexOf(controllerModule.activeProject);
-    // console.log(newTodo.projectId);
   }
 
   function createDeleteTodoButton() {
@@ -69,10 +67,9 @@ const domTodoController = (() => {
     }
   }
 
-  function editTodo(e) {
+  function editTodo(e, project, todo) {
     const todoWrapper = e.target.parentElement.parentElement;
-    const editedTodo = controllerModule.activeProject.todosArray[todoWrapper.dataset.id];
-    console.log(editedTodo);
+
     const expandButton = todoWrapper.querySelector('.expand-button');
     todoWrapper.classList.toggle('edited-todo');
     if (todoWrapper.classList.contains('edited-todo')) {
@@ -85,37 +82,37 @@ const domTodoController = (() => {
       const editTitleField = document.createElement('input');
       editTitleField.type = 'text';
       editTitleField.maxLength = 32;
-      editTitleField.value = editedTodo.title;
+      editTitleField.value = todo.title;
 
       const editDescriptionField = document.createElement('textarea');
       editDescriptionField.classList.add('edit-description');
-      editDescriptionField.value = editedTodo.description;
+      editDescriptionField.value = todo.description;
       editDescriptionField.maxLength = 150;
 
       const editPriorityField = document.createElement('select');
       editPriorityField.classList.add('edit-priority');
       const lowOption = document.createElement('option');
-      lowOption.value = 0;
+      lowOption.value = 'Low';
       lowOption.textContent = 'Low';
       const mediumOption = document.createElement('option');
-      mediumOption.value = 1;
+      mediumOption.value = 'Medium';
       mediumOption.textContent = 'Medium';
       const highOption = document.createElement('option');
-      highOption.value = 2;
+      highOption.value = 'High';
       highOption.textContent = 'High';
       editPriorityField.append(lowOption, mediumOption, highOption);
 
       const editDueDateField = document.createElement('input');
       editDueDateField.type = 'date';
-      console.log(new Date(editedTodo.dueDate));
-      console.log(format(new Date(editedTodo.dueDate), 'yyyy-MM-dd'));
-      editDueDateField.value = format(new Date(editedTodo.dueDate), 'yyyy-MM-dd');
+      console.log(new Date(todo.dueDate));
+      console.log(format(new Date(todo.dueDate), 'yyyy-MM-dd'));
+      editDueDateField.value = format(new Date(todo.dueDate), 'yyyy-MM-dd');
 
       const saveButton = document.createElement('button');
       saveButton.textContent = 's';
       saveButton.addEventListener('click', () => {
-        controllerModule.editTodo(editedTodo, editTitleField.value, editDescriptionField.value, format(new Date(editDueDateField.value), 'MMM/dd/yyyy'), editPriorityField.value);
-        renderTodos(controllerModule.activeProject);
+        controllerModule.editTodo(todo, editTitleField.value, editDescriptionField.value, format(new Date(editDueDateField.value), 'MMM/dd/yyyy'), editPriorityField.value);
+        renderTodos(project);
       });
 
       expandButton.disabled = true;
@@ -143,14 +140,14 @@ const domTodoController = (() => {
     return expandButton;
   }
 
-  function createEditButton() {
+  function createEditButton(project, todo) {
     const editButton = document.createElement('button');
     editButton.textContent = 'e';
     editButton.classList.add('edit-button');
 
     editButton.addEventListener('click', (e) => {
       console.log('hello, i am edit piath');
-      editTodo(e);
+      editTodo(e, project, todo);
     });
 
     return editButton;
@@ -170,15 +167,12 @@ const domTodoController = (() => {
       const dueDate = document.createElement('p');
       const iconsContainer = document.createElement('div');
       const deleteTodoButton = createDeleteTodoButton();
-      const editButton = createEditButton();
+      const editButton = createEditButton(project, todo);
       const expandButton = createExpandButton(todo);
-      // const projectOfTodo = controllerModule.projectsArray.filter(project.includes(todo));
-      // console.log(projectOfTodo);
 
       todoWrapper.classList.add('example-todo');
       todoWrapper.dataset.id = controllerModule.activeProject.todosArray.indexOf(todo);
       todoWrapper.dataset.projectId = controllerModule.projectsArray.indexOf(project);
-      // console.log(todoWrapper.dataset.projectId);
       checkBoxWrapper.classList.add('check-container');
       todoTitle.classList.add('todo-title');
       iconsContainer.classList.add('icons-container');
@@ -192,10 +186,8 @@ const domTodoController = (() => {
       checkBox.addEventListener('click', () => {
         if (checkBox.checked === true) {
           todo.finished = 'yes';
-          console.log(todo);
         } else if (checkBox.checked === false) {
           todo.finished = 'no';
-          console.log(todo);
         }
       });
 
@@ -208,29 +200,15 @@ const domTodoController = (() => {
       iconsContainer.append(deleteTodoButton);
       iconsContainer.append(editButton);
       iconsContainer.append(expandButton);
-
-      console.log(todo.dueDate);
     });
-    // console.log(controllerModule.activeProject.todosArray);
   }
 
-  function renderAllTodos() {
-    const renderedTodos = document.querySelectorAll('.example-todo');
-    renderedTodos.forEach((todo) => {
-      todo.remove();
-    });
-    const allTodos = [];
-    controllerModule.projectsArray.forEach((project) => {
-      allTodos.push(...project.todosArray);
-    });
-    console.log(allTodos);
-  }
+
 
 
   return {
     renderTodos,
     domCreateTodo,
-    renderAllTodos,
   };
 })();
 
