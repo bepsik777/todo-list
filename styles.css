@@ -120,6 +120,10 @@ li > p {
     justify-content: space-around;
 }
 
+.create-todo.hidden {
+    display: none;
+}
+
 #description {
     height: 30%;
 }
