@@ -155,6 +155,12 @@ const domProjectController = (() => {
 
   addProjectButton.addEventListener('click', () => {
     if (projectTitle.value === '') return;
+    for (let i = 0; i < controllerModule.projectsArray.length; i += 1) {
+      if (projectTitle.value === controllerModule.projectsArray[i].title) {
+        console.log('Project with same title already exist');
+        return;
+      }
+    }
     domCreateProject();
     projectTitle.value = '';
     renderProjectList();
