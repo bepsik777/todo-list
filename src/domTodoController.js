@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import controllerModule from './controller';
 import Todo from './todos';
+import { addToStorage } from './localstorage';
 
 
 const domTodoController = (() => {
@@ -21,7 +22,23 @@ const domTodoController = (() => {
     const priority = priorityInput.value;
 
 
+
     controllerModule.createTodo(actProjectContainer, Todo, title, description, date, priority);
+
+    console.log(controllerModule.projectsArray);
+    for (let i = 0; i < controllerModule.projectsArray.length; i += 1) {
+      console.log(localStorage);
+      console.log(controllerModule.projectsArray);
+
+
+      controllerModule.projectsArray.forEach((project) => {
+        addToStorage(project.title, project);
+      });
+
+      console.log(localStorage);
+      console.log(controllerModule.projectsArray);
+    }
+    console.log(controllerModule.projectsArray);
   }
 
   function createDeleteTodoButton() {
@@ -36,6 +53,11 @@ const domTodoController = (() => {
       const buttonId = e.target.dataset.id;
       controllerModule.activeProject.todosArray.splice(buttonId, 1);
       renderTodos(controllerModule.activeProject);
+
+      controllerModule.projectsArray.forEach((project) => {
+        addToStorage(project.title, project);
+      });
+
       console.log(e.target.dataset.id);
     });
 
@@ -113,6 +135,9 @@ const domTodoController = (() => {
       saveButton.addEventListener('click', () => {
         controllerModule.editTodo(todo, editTitleField.value, editDescriptionField.value, format(new Date(editDueDateField.value), 'MMM/dd/yyyy'), editPriorityField.value);
         renderTodos(project);
+        controllerModule.projectsArray.forEach((prj) => {
+          addToStorage(prj.title, project);
+        });
       });
 
       expandButton.disabled = true;

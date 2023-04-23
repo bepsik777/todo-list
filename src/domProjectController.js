@@ -2,9 +2,10 @@ import { format } from 'date-fns';
 import controllerModule from './controller';
 import projectFactory from './projects';
 import domTodoController from './domTodoController';
+import { addToStorage } from './localstorage';
 
 
-const domProjectController = () => {
+const domProjectController = (() => {
   const addProjectButton = document.getElementById('create-project-button');
   const createProjectButton = document.querySelector('.add-project');
   const projectTitle = document.getElementById('project-title');
@@ -20,7 +21,12 @@ const domProjectController = () => {
     const titleValue = projectTitle.value;
     controllerModule.createProject(projectFactory, titleValue, controllerModule.projectsArray);
 
+    // for (let i = 0; i < controllerModule.projectsArray.length; i += 1) {
+    //   addToStorage(i, controllerModule.projectsArray[i]);
+    // }
+
     console.log(controllerModule.projectsArray);
+    console.log(localStorage);
   }
 
   function domSwitchProject(e) {
@@ -51,13 +57,16 @@ const domProjectController = () => {
 
       if (controllerModule.projectsArray[e.target.dataset.id] === controllerModule.activeProject) {
         renderedProject.remove();
+        renderedProject.rendered = false;
       }
+      localStorage.removeItem(controllerModule.projectsArray[e.target.dataset.id].title);
       controllerModule.removeProject(e.target.dataset.id, controllerModule.projectsArray);
       deleteButtonArray.splice(e.target.dataset.id, 1);
       e.target.parentNode.remove();
 
       setDeleteButtonsId();
       console.log(controllerModule.projectsArray);
+      console.log(localStorage);
     });
     return deleteProjectButton;
   };
@@ -149,6 +158,9 @@ const domProjectController = () => {
     domCreateProject();
     projectTitle.value = '';
     renderProjectList();
+    controllerModule.projectsArray.forEach((project) => {
+      addToStorage(project.title, project);
+    });
 
     addProjectButton.classList.toggle('hidden');
     projectTitle.classList.toggle('hidden');
@@ -170,9 +182,9 @@ const domProjectController = () => {
 
   return {
     renderProjectList,
-    renderActiveProject: renderProject,
+    renderProject,
   };
-};
+})();
 
 
 export default domProjectController;

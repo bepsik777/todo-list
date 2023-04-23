@@ -1,4 +1,4 @@
-
+// import { addToStorage } from './localstorage';
 
 const projectManager = () => {
   function createProject(factory, title, container) {
