@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import controllerModule from './controller';
 import Todo from './todos';
-import { addToStorage } from './localstorage';
+import { populateStorage } from './localstorage';
 
 
 const domTodoController = (() => {
@@ -31,9 +31,7 @@ const domTodoController = (() => {
       console.log(controllerModule.projectsArray);
 
 
-      controllerModule.projectsArray.forEach((project) => {
-        addToStorage(project.title, project);
-      });
+      populateStorage();
 
       console.log(localStorage);
       console.log(controllerModule.projectsArray);
@@ -54,9 +52,7 @@ const domTodoController = (() => {
       controllerModule.activeProject.todosArray.splice(buttonId, 1);
       renderTodos(controllerModule.activeProject);
 
-      controllerModule.projectsArray.forEach((project) => {
-        addToStorage(project.title, project);
-      });
+      populateStorage();
 
       console.log(e.target.dataset.id);
     });
@@ -135,9 +131,7 @@ const domTodoController = (() => {
       saveButton.addEventListener('click', () => {
         controllerModule.editTodo(todo, editTitleField.value, editDescriptionField.value, format(new Date(editDueDateField.value), 'MMM/dd/yyyy'), editPriorityField.value);
         renderTodos(project);
-        controllerModule.projectsArray.forEach((prj) => {
-          addToStorage(prj.title, project);
-        });
+        populateStorage();
       });
 
       expandButton.disabled = true;

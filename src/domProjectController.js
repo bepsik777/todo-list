@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import controllerModule from './controller';
 import projectFactory from './projects';
 import domTodoController from './domTodoController';
-import { addToStorage } from './localstorage';
+import { populateStorage } from './localstorage';
 
 
 const domProjectController = (() => {
@@ -20,13 +20,6 @@ const domProjectController = (() => {
   function domCreateProject() {
     const titleValue = projectTitle.value;
     controllerModule.createProject(projectFactory, titleValue, controllerModule.projectsArray);
-
-    // for (let i = 0; i < controllerModule.projectsArray.length; i += 1) {
-    //   addToStorage(i, controllerModule.projectsArray[i]);
-    // }
-
-    console.log(controllerModule.projectsArray);
-    console.log(localStorage);
   }
 
   function domSwitchProject(e) {
@@ -59,14 +52,17 @@ const domProjectController = (() => {
         renderedProject.remove();
         renderedProject.rendered = false;
       }
-      localStorage.removeItem(controllerModule.projectsArray[e.target.dataset.id].title);
+
+      for (let i = 0; i < controllerModule.projectsArray.length; i += 1) {
+        controllerModule.projectsArray[i].id = i;
+      }
+
       controllerModule.removeProject(e.target.dataset.id, controllerModule.projectsArray);
       deleteButtonArray.splice(e.target.dataset.id, 1);
       e.target.parentNode.remove();
+      populateStorage();
 
       setDeleteButtonsId();
-      console.log(controllerModule.projectsArray);
-      console.log(localStorage);
     });
     return deleteProjectButton;
   };
@@ -164,9 +160,8 @@ const domProjectController = (() => {
     domCreateProject();
     projectTitle.value = '';
     renderProjectList();
-    controllerModule.projectsArray.forEach((project) => {
-      addToStorage(project.title, project);
-    });
+    console.log(controllerModule.projectsArray);
+    populateStorage();
 
     addProjectButton.classList.toggle('hidden');
     projectTitle.classList.toggle('hidden');
@@ -197,5 +192,5 @@ export default domProjectController;
 
 
 /*
-
+local storage rearange project in numerical/alphavetical order. WHY?
 */
