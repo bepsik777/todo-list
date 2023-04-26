@@ -24,8 +24,12 @@ const domProjectController = (() => {
 
   function domSwitchProject(e) {
     // dynamically set id when list item clicked
-    e.target.dataset.id = e.target.nextSibling.dataset.id;
-    controllerModule.switchProject(e.target.dataset.id, controllerModule.projectsArray);
+
+    // using currentTarget instead of target super important! when target used and paragraph clicked
+    // target refered to paragraph even without handler. currentTarget refers to the node with
+    // the event listener!
+    e.currentTarget.dataset.id = e.currentTarget.lastChild.dataset.id;
+    controllerModule.switchProject(e.currentTarget.dataset.id, controllerModule.projectsArray);
     console.log(controllerModule.activeProject);
   }
 
@@ -46,6 +50,7 @@ const domProjectController = (() => {
 
 
     deleteProjectButton.addEventListener('click', (e) => {
+      e.stopPropagation();
       const renderedProject = document.querySelector('.active-project');
 
       if (controllerModule.projectsArray[e.target.dataset.id] === controllerModule.activeProject) {
@@ -70,11 +75,7 @@ const domProjectController = (() => {
   function createProjectListParagraph(project) {
     const listParagraph = document.createElement('p');
     listParagraph.textContent = project.title;
-    listParagraph.addEventListener('click', (e) => {
-      domSwitchProject(e);
-      renderProject(project);
-      if (form.classList.contains('hidden')) form.classList.toggle('hidden');
-    });
+
     return listParagraph;
   }
 
@@ -85,6 +86,11 @@ const domProjectController = (() => {
         const listParagraph = createProjectListParagraph(project);
         const deleteProjectButton = createDeleteProjectButton(project);
 
+        listItem.addEventListener('click', (e) => {
+          e.stopPropagation();
+          domSwitchProject(e);
+          renderProject(project);
+        });
 
         projectsList.append(listItem);
         listItem.appendChild(listParagraph);
@@ -96,16 +102,17 @@ const domProjectController = (() => {
   }
 
   function renderProject(project) {
-    // const project = controllerModule.activeProject;
     const main = document.querySelector('.main');
     const currentRenderedProject = document.querySelector('.active-project');
     const newRenderedProject = document.createElement('div');
     const title = document.createElement('h2');
-    // console.log(currentRenderedProject);
+
     if (currentRenderedProject !== null) {
       currentRenderedProject.remove();
     }
+
     if (controllerModule.activeProject === undefined) return;
+
     newRenderedProject.classList.add('active-project');
     title.textContent = controllerModule.activeProject.title;
     title.classList.add('rendered-project-title');
@@ -149,6 +156,13 @@ const domProjectController = (() => {
     title.textContent = 'Today';
   }
 
+  projectTitle.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addProjectButton.click();
+    }
+  });
+
   addProjectButton.addEventListener('click', () => {
     if (projectTitle.value === '') return;
     for (let i = 0; i < controllerModule.projectsArray.length; i += 1) {
@@ -157,14 +171,15 @@ const domProjectController = (() => {
         return;
       }
     }
+
     domCreateProject();
-    projectTitle.value = '';
     renderProjectList();
-    console.log(controllerModule.projectsArray);
     populateStorage();
 
     addProjectButton.classList.toggle('hidden');
     projectTitle.classList.toggle('hidden');
+
+    projectTitle.value = '';
   });
 
   createProjectButton.addEventListener('click', () => {

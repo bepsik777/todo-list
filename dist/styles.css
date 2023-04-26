@@ -1,3 +1,10 @@
+:root {
+    --main-bg-clr: #f9fafb;
+    --form-clr: #f8fafc;
+    --header-clr: #0ea5e9;
+    --prjct-clr: #0ea5e9;
+}
+
 * {
     margin: 0;
     box-sizing: border-box;
@@ -6,6 +13,7 @@
 .header {
     min-height: 10vh;
     border: 1px solid black;
+    background-color: var(--header-clr);
     display: flex;;
     justify-content: center;
     align-items: center;
@@ -15,11 +23,15 @@
     display: flex;
     min-height: 90vh;
     max-width: 100vw;
+    background-color: var(--main-bg-clr);
 }
 
 /* SIDEBAR */
 .sidebar {
-    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--main-bg-clr);
+    min-height: 100%;
     width: 15%;
     border: 1px solid black;
 }
@@ -29,7 +41,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    height: 30%;
+    /* height: 30%; */
     
     
     /* border: 1px solid black; */
@@ -38,7 +50,7 @@
 .category{
     font-size: 1.2rem;
     width: 100%;
-    height: 18%;
+    /* height: 18%; */
     /* border: 1px solid black; */
     padding: 10px 0;
 }
@@ -79,12 +91,30 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    cursor: pointer;
 }
 
 li > p {
     margin-left: 13px;
 }
 
+.create-todo {
+    /* border: 4px solid #f8fafc; */
+    background-color: var(--form-clr);
+    height: 50%; width: 95%;
+    margin-top: 4rem;
+    padding: 10px;
+    border-radius: 10px;
+    align-self: center;
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.create-todo.hidden {
+    display: none;
+}
 /* MAIN */
 
 .main {
@@ -101,7 +131,7 @@ li > p {
 
 
 .active-project {
-    background-color: blueviolet;
+    background-color: var(--prjct-clr);
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -112,17 +142,6 @@ li > p {
     gap: 10px;
 }
 
-.create-todo {
-    height: 50%;
-    /* border: 1px solid black; */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-.create-todo.hidden {
-    display: none;
-}
 
 #description {
     height: 30%;
