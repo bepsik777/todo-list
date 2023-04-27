@@ -41,7 +41,9 @@ const domTodoController = (() => {
 
   function createDeleteTodoButton() {
     const deleteTodoButton = document.createElement('button');
-    deleteTodoButton.textContent = 'X';
+    const svgString = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="humbleicons hi-trash"><path xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l.934 13.071A1 1 0 007.93 20h8.138a1 1 0 00.997-.929L18 6m-6 5v4m8-9H4m4.5 0l.544-1.632A2 2 0 0110.941 3h2.117a2 2 0 011.898 1.368L15.5 6"/></svg>';
+    // deleteTodoButton.textContent = 'X';
+    deleteTodoButton.innerHTML = svgString;
     deleteTodoButton.classList.add('delete-todo-button');
     deleteTodoButtonArray.push(deleteTodoButton);
     deleteTodoButton.dataset.id = deleteTodoButtonArray.indexOf(deleteTodoButton);
@@ -61,7 +63,7 @@ const domTodoController = (() => {
   }
 
   function expandTodo(e, todo) {
-    const todoWrapper = e.target.parentElement.parentElement;
+    const todoWrapper = e.currentTarget.parentElement.parentElement;
     todoWrapper.classList.toggle('active-todo');
     if (todoWrapper.classList.contains('active-todo') === true) {
       const descriptionWrapper = document.createElement('div');
@@ -86,9 +88,9 @@ const domTodoController = (() => {
   }
 
   function editTodo(e, project, todo) {
-    const todoWrapper = e.target.parentElement.parentElement;
-
+    const todoWrapper = e.currentTarget.parentElement.parentElement;
     const expandButton = todoWrapper.querySelector('.expand-button');
+
     todoWrapper.classList.toggle('edited-todo');
     if (todoWrapper.classList.contains('edited-todo')) {
       // get some of the existing elemnts, to replace them after
@@ -127,7 +129,9 @@ const domTodoController = (() => {
       editDueDateField.value = format(new Date(todo.dueDate), 'yyyy-MM-dd');
 
       const saveButton = document.createElement('button');
-      saveButton.textContent = 's';
+      saveButton.classList.add('save-button');
+      const svgString = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" height=20 width=20 class="humbleicons hi-save"><path xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V7.828a2 2 0 00-.586-1.414l-1.828-1.828A2 2 0 0016.172 4H15M8 4v4a1 1 0 001 1h5a1 1 0 001-1V4M8 4h7M7 17v-3a1 1 0 011-1h8a1 1 0 011 1v3"/></svg>';
+      saveButton.innerHTML = svgString;
       saveButton.addEventListener('click', () => {
         controllerModule.editTodo(todo, editTitleField.value, editDescriptionField.value, format(new Date(editDueDateField.value), 'MMM/dd/yyyy'), editPriorityField.value);
         renderTodos(project);
@@ -148,7 +152,8 @@ const domTodoController = (() => {
 
   function createExpandButton(todo) {
     const expandButton = document.createElement('button');
-    expandButton.textContent = '↓';
+    const svgString = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" width=20 height=20 class="humbleicons hi-chevron-down"><path xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-width="2" d="M5 10l7 7 7-7"/></svg>';
+    expandButton.innerHTML = svgString;
     expandButton.classList.add('expand-button');
 
     expandButton.addEventListener('click', (e) => {
@@ -161,7 +166,8 @@ const domTodoController = (() => {
 
   function createEditButton(project, todo) {
     const editButton = document.createElement('button');
-    editButton.textContent = 'e';
+    const editSvgString = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" height=20 width=20 class="humbleicons hi-pencil"><path xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 7.5l3 3M4 20v-3.5L15.293 5.207a1 1 0 011.414 0l2.086 2.086a1 1 0 010 1.414L7.5 20H4z"/></svg>';
+    editButton.innerHTML = editSvgString;
     editButton.classList.add('edit-button');
 
     editButton.addEventListener('click', (e) => {

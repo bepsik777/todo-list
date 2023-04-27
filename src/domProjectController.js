@@ -28,6 +28,7 @@ const domProjectController = (() => {
     // using currentTarget instead of target super important! when target used and paragraph clicked
     // target refered to paragraph even without handler. currentTarget refers to the node with
     // the event listener!
+
     e.currentTarget.dataset.id = e.currentTarget.lastChild.dataset.id;
     controllerModule.switchProject(e.currentTarget.dataset.id, controllerModule.projectsArray);
     console.log(controllerModule.activeProject);
@@ -74,6 +75,7 @@ const domProjectController = (() => {
 
   function createProjectListParagraph(project) {
     const listParagraph = document.createElement('p');
+
     listParagraph.textContent = project.title;
 
     return listParagraph;
@@ -86,10 +88,15 @@ const domProjectController = (() => {
         const listParagraph = createProjectListParagraph(project);
         const deleteProjectButton = createDeleteProjectButton(project);
 
+        listItem.classList.add('category', 'project');
+
         listItem.addEventListener('click', (e) => {
           e.stopPropagation();
           domSwitchProject(e);
           renderProject(project);
+          changeProjectParagraphColor(e.currentTarget);
+
+          if (form.classList.contains('hidden')) form.classList.toggle('hidden');
         });
 
         projectsList.append(listItem);
@@ -154,6 +161,19 @@ const domProjectController = (() => {
     renderProject(todayTodos);
     const title = document.querySelector('.rendered-project-title');
     title.textContent = 'Today';
+    if (!form.classList.contains('hidden')) form.classList.toggle('hidden');
+  }
+
+  function changeProjectParagraphColor(paragraph) {
+    const paragraphs = document.querySelectorAll('.category');
+    paragraphs.forEach((item) => {
+      if (item.classList.contains('active')) {
+        console.log(`${item}`);
+        item.classList.remove('active');
+      }
+    });
+    paragraph.classList.toggle('active');
+    console.log(paragraphs);
   }
 
   projectTitle.addEventListener('keypress', (e) => {
@@ -176,6 +196,12 @@ const domProjectController = (() => {
     renderProjectList();
     populateStorage();
 
+    if (controllerModule.projectsArray.length === 1) {
+      const li = document.querySelector('.category.project');
+      li.classList.add('active');
+    }
+
+    if (form.classList.contains('hidden')) form.classList.toggle('hidden');
     addProjectButton.classList.toggle('hidden');
     projectTitle.classList.toggle('hidden');
 
@@ -193,8 +219,14 @@ const domProjectController = (() => {
     renderProject(controllerModule.activeProject);
   });
 
-  inboxButton.addEventListener('click', renderInbox);
-  todayButton.addEventListener('click', renderTodayTodos);
+  inboxButton.addEventListener('click', (e) => {
+    renderInbox();
+    changeProjectParagraphColor(e.target);
+  });
+  todayButton.addEventListener('click', (e) => {
+    renderTodayTodos();
+    changeProjectParagraphColor(e.target);
+  });
 
   return {
     renderProjectList,
