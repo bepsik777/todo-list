@@ -1,4 +1,3 @@
-// import { addToStorage } from './localstorage';
 
 const projectManager = () => {
   function createProject(factory, title, container) {
@@ -26,8 +25,8 @@ const projectManager = () => {
 const todoManager = () => {
   const createTodo = (activeProject, factory, title, description, dueDate, priority) => {
     const newTodo = factory(title, description, dueDate, priority);
-    // Automatically push the todo into the active project
     activeProject.push(newTodo);
+
     return newTodo;
   };
 
@@ -50,13 +49,13 @@ const todoManager = () => {
 };
 
 const controllerModule = (() => {
-  const proto = {
+  const state = {
     projectsArray: [],
     activeProject: undefined,
   };
 
   return {
-    ...proto,
+    ...state,
     ...projectManager(),
     ...todoManager(),
   };

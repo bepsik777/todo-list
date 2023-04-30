@@ -17,6 +17,7 @@
         "no-use-before-define": ["error", {"functions": false}],
         "max-len": "off",
         "import/no-extraneous-dependencies": "off",
-        "no-restricted-syntax": "off"
+        "no-restricted-syntax": "off",
+        "default-case": "off"
     }
 }

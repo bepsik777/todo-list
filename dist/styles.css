@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Roboto+Mono:wght@400;500&display=swap');
 
 :root {
+    --main-font: 'lato', sans-serif;
+
     --main-bg-clr: #f9fafb;
     --todo-clr: #38bff8a1;
     --todo-brdr-clr: #f9fafb;
@@ -43,6 +45,7 @@ html {
     min-height: 100%;
     width: 15%;
     border: 1px solid black;
+    /* padding: 10px; */
 }
 
 
@@ -95,19 +98,54 @@ html {
 
 .projects-list > h4 {
     margin-left: 13px;
+    display: flex;
+    align-items: center;
 }
+
+.add-project {
+    background-color: transparent;
+    border: none;
+    margin-left: 20%;
+    margin-top: 10%;
+    cursor: pointer;
+}
+
 
 #project-title.hidden,
 #create-project-button.hidden {
     display: none;
 }
 
+.delete-project-button {
+    /* height: 5px; width: 5px; */
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-project-button:hover {
+    color: var(--todo-brdr-clr);
+}
+
+.humbleicons.project {
+    color: black;
+}
+
+.humbleicons.project:hover {
+    color: var(--todo-brdr-clr);
+}
+
 .projects-list > li {
-    font-size: 1rem;
+    font-size: 1.2rem;
     /* border: 1px solid black; */
     height: 2rem;
     list-style: none;
     padding-left: 0;
+    padding-top: 6px;
+    padding-bottom: 6px;
     width: 100%;
     display: flex;
     align-items: center;
@@ -129,14 +167,16 @@ li:active {
 
 li > p {
     margin-left: 13px;
+    display: flex;
+    align-items: center;
 }
 
 .create-todo {
-    /* border: 4px solid #f8fafc; */
+    border: 4px solid red;
     background-color: var(--form-clr);
-    height: 50%; width: 95%;
+    height: 50vh; width: 95%;
     margin-top: 4rem;
-    padding: 10px;
+    padding: 20px;
     border-radius: 10px;
     align-self: center;
     /* border: 1px solid black; */
@@ -145,8 +185,36 @@ li > p {
     justify-content: space-around;
 }
 
+.create-todo > h4 {
+    font-size: 1.3rem;
+}
+
 .create-todo.hidden {
     display: none;
+}
+
+.create-todo > input,
+.create-todo > textarea {
+    background-color: transparent;
+    border: 1px solid var(--header-clr);
+}
+
+.create-todo > select {
+    background-color: white;
+    border: 1px solid var(--header-clr);
+}
+
+.create-todo-button,
+#create-project-button {
+    font-family: var(--main-font);
+    background-color: white;
+    border: 1px solid var(--header-clr);
+}
+
+.create-todo-button:hover,
+#create-project-button:hover {
+    background-color: var(--active-li-clr);
+    color: white;
 }
 /* MAIN */
 
@@ -184,26 +252,28 @@ li > p {
     min-height: 10%;
 }
 
+.rendered-project-title {
+    color: var(--todo-brdr-clr);
+}
+
 .example-todo {
     display: grid;
+    color: var(--todo-brdr-clr);
     background-color: var(--todo-clr);
     border: 2px solid var(--todo-brdr-clr);
     border-radius: 10px;
     grid-template-columns: repeat(4, 1fr);
     padding: 10px 5px;
     width: 90%;
-    height: 3rem;
+    min-height: 3rem;
 }
 
 .example-todo.active-todo,
 .example-todo.edited-todo {
-    height: 9rem;
+    min-height: 9rem;
     grid-template-rows: repeat(3, 1fr) ;
 }
 
-/* .example-todo > * {
-    border: 1px solid black;
-} */
 
 .check-container {
     height: 25px;
@@ -228,7 +298,9 @@ input[type="checkbox"] {
   }
 
 .todo-title {
-    height: 25px;
+    /* border: 1px solid black; */
+    min-height: 25px;
+    /* width: 100%; */
     grid-column: 2;
 }
 
@@ -245,6 +317,7 @@ input[type="checkbox"] {
     align-items: center;
     justify-self: end;
     justify-content: space-between;
+    margin-bottom: 20%;
     width: 60%;
     height: 25px;
   }
@@ -253,9 +326,17 @@ input[type="checkbox"] {
 .edit-button,
 .expand-button,
 .save-button {
+    height: 2rem; width: 2rem;
     border: none;
     background-color: transparent;
     cursor: pointer;
+}
+
+.delete-todo-button:hover,
+.edit-button:hover,
+.expand-button:hover,
+.save-button:hover {
+    background-color: var(--active-li-clr);
 }
 
 .humbleicons {
@@ -264,12 +345,27 @@ input[type="checkbox"] {
     width: 25px;
 }
 
+
+
+
 .description,
 .edit-description {
-    height: 100%;
+    border: 1px solid var(--todo-brdr-clr);
+    /* background-color: transparent; */
+    min-height: 100%;
     grid-row: 2/4;
     grid-column: 1/3;
+    padding: 10px;
+    overflow-wrap: break-word;
 }
+
+.example-todo > * {
+    margin: 2px;
+}
+
+/* .edit-priority {
+    background-color: transparent;
+} */
 
 .priority-wrapper,
 .edit-priority {
@@ -277,6 +373,16 @@ input[type="checkbox"] {
     grid-column: 4;
 }
 
+.priority-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3rem;
+}
+
+.hi-folder-add {
+    color: black;
+}
 /* .todo-row {
     min-height: 100%;
     width: 100%;

@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import controllerModule from './controller';
-import Todo from './todos';
+import { todoFactory } from './factories';
 import { populateStorage } from './localstorage';
 
 
@@ -8,7 +8,6 @@ const domTodoController = (() => {
   const titleInput = document.querySelector('#title');
   const descriptionInput = document.querySelector('#description');
   const endDateInput = document.querySelector('#end-date');
-  //   const createTodoButton = document.querySelector('.create-todo-button');
   const priorityInput = document.querySelector('#priority');
   const deleteTodoButtonArray = [];
 
@@ -21,42 +20,27 @@ const domTodoController = (() => {
     const date = format(new Date(endDateInput.value), 'MMM/dd/yyyy');
     const priority = priorityInput.value;
 
+    controllerModule.createTodo(actProjectContainer, todoFactory, title, description, date, priority);
 
-
-    controllerModule.createTodo(actProjectContainer, Todo, title, description, date, priority);
-
-    console.log(controllerModule.projectsArray);
-    for (let i = 0; i < controllerModule.projectsArray.length; i += 1) {
-      console.log(localStorage);
-      console.log(controllerModule.projectsArray);
-
-
-      populateStorage();
-
-      console.log(localStorage);
-      console.log(controllerModule.projectsArray);
-    }
-    console.log(controllerModule.projectsArray);
+    populateStorage();
   }
 
   function createDeleteTodoButton() {
     const deleteTodoButton = document.createElement('button');
-    const svgString = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="humbleicons hi-trash"><path xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l.934 13.071A1 1 0 007.93 20h8.138a1 1 0 00.997-.929L18 6m-6 5v4m8-9H4m4.5 0l.544-1.632A2 2 0 0110.941 3h2.117a2 2 0 011.898 1.368L15.5 6"/></svg>';
-    // deleteTodoButton.textContent = 'X';
-    deleteTodoButton.innerHTML = svgString;
+    const trashBinIcon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="humbleicons hi-trash"><path xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l.934 13.071A1 1 0 007.93 20h8.138a1 1 0 00.997-.929L18 6m-6 5v4m8-9H4m4.5 0l.544-1.632A2 2 0 0110.941 3h2.117a2 2 0 011.898 1.368L15.5 6"/></svg>';
+
+    deleteTodoButton.innerHTML = trashBinIcon;
     deleteTodoButton.classList.add('delete-todo-button');
     deleteTodoButtonArray.push(deleteTodoButton);
     deleteTodoButton.dataset.id = deleteTodoButtonArray.indexOf(deleteTodoButton);
 
     deleteTodoButton.addEventListener('click', (e) => {
-      e.target.dataset.id = e.target.parentElement.parentElement.dataset.id; // dynamically set id
+      e.target.dataset.id = e.currentTarget.parentElement.parentElement.dataset.id; // dynamically set id
       const buttonId = e.target.dataset.id;
       controllerModule.activeProject.todosArray.splice(buttonId, 1);
       renderTodos(controllerModule.activeProject);
 
       populateStorage();
-
-      console.log(e.target.dataset.id);
     });
 
     return deleteTodoButton;
@@ -64,6 +48,7 @@ const domTodoController = (() => {
 
   function expandTodo(e, todo) {
     const todoWrapper = e.currentTarget.parentElement.parentElement;
+    console.log(todoWrapper);
     todoWrapper.classList.toggle('active-todo');
     if (todoWrapper.classList.contains('active-todo') === true) {
       const descriptionWrapper = document.createElement('div');
@@ -73,14 +58,14 @@ const domTodoController = (() => {
       priorityWrapper.classList.add('priority-wrapper');
 
       description.textContent = todo.description;
-      priorityWrapper.textContent = todo.priority;
+      priorityWrapper.textContent = `Priority: ${todo.priority}`;
 
       todoWrapper.append(descriptionWrapper);
       todoWrapper.append(priorityWrapper);
       descriptionWrapper.append(description);
     } else if (todoWrapper.classList.contains('active-todo') === false) {
-      const descriptionWrapper = document.querySelector('.description');
-      const priorityWrapper = document.querySelector('.priority-wrapper');
+      const descriptionWrapper = todoWrapper.querySelector('.description');
+      const priorityWrapper = todoWrapper.querySelector('.priority-wrapper');
 
       descriptionWrapper.remove();
       priorityWrapper.remove();
@@ -101,7 +86,7 @@ const domTodoController = (() => {
       // create the new elements, to be able to edit todo
       const editTitleField = document.createElement('input');
       editTitleField.type = 'text';
-      editTitleField.maxLength = 32;
+      editTitleField.maxLength = 20;
       editTitleField.value = todo.title;
 
       const editDescriptionField = document.createElement('textarea');
@@ -158,7 +143,7 @@ const domTodoController = (() => {
 
     expandButton.addEventListener('click', (e) => {
       // dynamically set id
-      e.target.dataset.id = e.target.parentElement.parentElement.dataset.id;
+      e.currentTarget.dataset.id = e.currentTarget.parentElement.parentElement.dataset.id;
       expandTodo(e, todo);
     });
     return expandButton;
@@ -177,6 +162,22 @@ const domTodoController = (() => {
 
     return editButton;
   }
+
+  function changeTodoColor(todo, domTodo) {
+    const prj = todo.priority;
+    switch (prj) {
+      case 'Low':
+        domTodo.style.backgroundColor = '#8b5cf6';
+        break;
+      case 'Medium':
+        domTodo.style.backgroundColor = '#6d28d9';
+        break;
+      case 'High':
+        domTodo.style.backgroundColor = '#4c1d95';
+        break;
+    }
+  }
+
 
   function renderTodos(project) {
     const renderedTodos = document.querySelectorAll('.example-todo');
@@ -214,6 +215,7 @@ const domTodoController = (() => {
         } else if (checkBox.checked === false) {
           todo.finished = 'no';
         }
+        populateStorage();
       });
 
       todoTitle.textContent = todo.title;
@@ -225,6 +227,8 @@ const domTodoController = (() => {
       iconsContainer.append(deleteTodoButton);
       iconsContainer.append(editButton);
       iconsContainer.append(expandButton);
+
+      changeTodoColor(todo, todoWrapper);
     });
   }
 
