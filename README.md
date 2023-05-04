@@ -11,4 +11,4 @@ This is a todo list project for TOP. The technologies used are
 
 LocalStorage:
 The local storage works as follow: 
-- Whenever a project is created/deleted, or whenever a todo in a project is created/deleted/edited, all project are stringified and added to localStorage
+- Whenever a project is created/deleted, or whenever a todo in a project is created/deleted/edited, the localStorage is cleared, and all project are stringified and added to localStorage
