@@ -25,30 +25,8 @@ const domTodoController = (() => {
     populateStorage();
   }
 
-  function createDeleteTodoButton() {
-    const deleteTodoButton = document.createElement('button');
-    const trashBinIcon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="humbleicons hi-trash"><path xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l.934 13.071A1 1 0 007.93 20h8.138a1 1 0 00.997-.929L18 6m-6 5v4m8-9H4m4.5 0l.544-1.632A2 2 0 0110.941 3h2.117a2 2 0 011.898 1.368L15.5 6"/></svg>';
-
-    deleteTodoButton.innerHTML = trashBinIcon;
-    deleteTodoButton.classList.add('delete-todo-button');
-    deleteTodoButtonArray.push(deleteTodoButton);
-    deleteTodoButton.dataset.id = deleteTodoButtonArray.indexOf(deleteTodoButton);
-
-    deleteTodoButton.addEventListener('click', (e) => {
-      e.target.dataset.id = e.currentTarget.parentElement.parentElement.dataset.id; // dynamically set id
-      const buttonId = e.target.dataset.id;
-      controllerModule.activeProject.todosArray.splice(buttonId, 1);
-      renderTodos(controllerModule.activeProject);
-
-      populateStorage();
-    });
-
-    return deleteTodoButton;
-  }
-
   function expandTodo(e, todo) {
     const todoWrapper = e.currentTarget.parentElement.parentElement;
-    console.log(todoWrapper);
     todoWrapper.classList.toggle('active-todo');
     if (todoWrapper.classList.contains('active-todo') === true) {
       const descriptionWrapper = document.createElement('div');
@@ -105,6 +83,11 @@ const domTodoController = (() => {
       const highOption = document.createElement('option');
       highOption.value = 'High';
       highOption.textContent = 'High';
+      const options = [lowOption, mediumOption, highOption];
+      // set select default value to todo priority
+      for (let i = 0; i < options.length; i += 1) {
+        if (options[i].value === todo.priority) options[i].selected = 'selected';
+      }
       editPriorityField.append(lowOption, mediumOption, highOption);
 
       const editDueDateField = document.createElement('input');
@@ -135,6 +118,8 @@ const domTodoController = (() => {
     }
   }
 
+  /* UI */
+
   function createExpandButton(todo) {
     const expandButton = document.createElement('button');
     const svgString = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" width=20 height=20 class="humbleicons hi-chevron-down"><path xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-width="2" d="M5 10l7 7 7-7"/></svg>';
@@ -162,6 +147,28 @@ const domTodoController = (() => {
 
     return editButton;
   }
+
+  function createDeleteTodoButton() {
+    const deleteTodoButton = document.createElement('button');
+    const trashBinIcon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="humbleicons hi-trash"><path xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l.934 13.071A1 1 0 007.93 20h8.138a1 1 0 00.997-.929L18 6m-6 5v4m8-9H4m4.5 0l.544-1.632A2 2 0 0110.941 3h2.117a2 2 0 011.898 1.368L15.5 6"/></svg>';
+
+    deleteTodoButton.innerHTML = trashBinIcon;
+    deleteTodoButton.classList.add('delete-todo-button');
+    deleteTodoButtonArray.push(deleteTodoButton);
+    deleteTodoButton.dataset.id = deleteTodoButtonArray.indexOf(deleteTodoButton);
+
+    deleteTodoButton.addEventListener('click', (e) => {
+      e.target.dataset.id = e.currentTarget.parentElement.parentElement.dataset.id; // dynamically set id
+      const buttonId = e.target.dataset.id;
+      controllerModule.activeProject.todosArray.splice(buttonId, 1);
+      renderTodos(controllerModule.activeProject);
+
+      populateStorage();
+    });
+
+    return deleteTodoButton;
+  }
+
 
   function changeTodoColor(todo, domTodo) {
     const prj = todo.priority;
