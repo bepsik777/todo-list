@@ -24,10 +24,11 @@ html {
 body {
     min-width: 100vw;
 }
+
 /* HEADER */
 .header {
     min-height: 10vh;
-    width: 100vw;
+    width: 100%;
     border: 1px solid black;
     background-color: var(--header-clr);
     display: flex;;
@@ -43,23 +44,21 @@ body {
 .main-container {
     display: flex;
     min-height: 90vh;
-    min-width: 30vw;
+    min-width: 45rem;
     background-color: var(--main-bg-clr);
 }
 
 /* SIDEBAR */
 .sidebar {
     min-height: 100%;
-    max-width: 17rem;
-    min-width: 6rem;
+    width: 17rem;
+    min-width: 5rem;
 
     display: flex;
     flex-shrink: 2;
     flex-direction: column;
     background-color: var(--main-bg-clr);
-    /* width:max-content; */
-    border: 1px solid black;
-    /* padding: 10px; */
+    border-right: 2px solid black;
 }
 
 
@@ -67,10 +66,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    /* height: 30%; */
-    
-    
-    /* border: 1px solid black; */
 }
 
 .category{
@@ -96,7 +91,7 @@ body {
     margin-left: 10px;
 }
 
-
+/* PROJECT LIST */
 
 .projects-list {
     font-size: 1.2rem;
@@ -114,42 +109,6 @@ body {
     margin-left: 13px;
     display: flex;
     align-items: center;
-}
-
-.add-project {
-    background-color: transparent;
-    border: none;
-    margin-left: 20%;
-    margin-top: 10%;
-    cursor: pointer;
-}
-
-
-#project-title.hidden,
-#create-project-button.hidden {
-    display: none;
-}
-
-.delete-project-button {
-    /* height: 5px; width: 5px; */
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.delete-project-button:hover {
-    color: var(--todo-brdr-clr);
-}
-
-.humbleicons.project {
-    color: black;
-}
-
-.humbleicons.project:hover {
-    color: var(--todo-brdr-clr);
 }
 
 .projects-list > li {
@@ -184,6 +143,47 @@ li > p {
     display: flex;
     align-items: center;
 }
+/* .add-project {
+    background-color: transparent;
+    border: none;
+    margin-left: 20%;
+    margin-top: 10%;
+    cursor: pointer;
+} */
+
+
+
+
+#project-title.hidden,
+#create-project-button.hidden {
+    display: none;
+}
+
+.delete-project-button {
+    /* height: 5px; width: 5px; */
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-project-button:hover {
+    color: var(--todo-brdr-clr);
+}
+
+.humbleicons.project {
+    color: black;
+}
+
+.humbleicons.project:hover {
+    color: var(--todo-brdr-clr);
+    background-color: var(--header-clr);
+}
+
+
+/* CREATE TODO FORM */
 
 .create-todo {
     border: 4px solid red;
@@ -237,22 +237,18 @@ li > p {
     min-height: 90vh;
     width: 85%;
     padding: 20px 0;
-    /* border: 1px solid black; */
     display: flex;
     justify-content: center;
-    /* display: none; */
 }
 
 
 
 .active-project {
-    /* background-color: var(--prjct-clr); */
     display: flex;
     flex-direction: column;
     height: 100%;
     width: 100%;
     padding: 10px 0;
-    /* border: 1px solid black; */
     align-items: center;
     gap: 10px;
 }
@@ -274,8 +270,6 @@ li > p {
     min-width: 90%;
     min-height: 3rem;
     display: grid;
-    /* grid-template-columns: repeat(4, 1fr); */
-    /* grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)) */
 
     border: 2px solid var(--todo-brdr-clr);
     border-radius: 10px;
@@ -288,7 +282,8 @@ li > p {
 .example-todo.active-todo,
 .example-todo.edited-todo {
     min-height: 9rem;
-    grid-template-rows: repeat(auto-fit, minmax(25%, 1fr)) ;
+    grid-template-rows: repeat(auto-fit, minmax(25%
+    , 1fr)) ;
 }
 
 
@@ -308,22 +303,22 @@ input[type="checkbox"] {
     cursor: pointer;
     border: 0;
     appearance: none; -webkit-appearance: none; 
-    /* vertical-align: middle; */
   }
+
   input[type="checkbox"]:checked { 
     box-shadow: inset 0 0 0 10px red;
   }
 
 .todo-title {
-    /* border: 1px solid black; */
+    justify-self: start;
     min-height: 25px;
-    /* width: 100%; */
+    width: clamp(2rem, 15rem, 20rem);
     grid-column: 2;
 }
 
-/* .date-paragraph {
-    font-size: clamp(0.5rem, 1rem, 1rem);
-} */
+.date-paragraph {
+    margin: 0;
+}
 
 .checked-description {
     display: inline-block;
@@ -365,6 +360,28 @@ input[type="checkbox"] {
     height: 25px;
     width: 25px;
 }
+/* ADD PROJECT ICON */
+.hi-folder-add {
+    color: black;
+}
+
+.add-project {
+    background-color: transparent;
+    border: none;
+    margin-left: 20%;
+    margin-top: 10%;
+    cursor: pointer;
+    color: black;
+}
+
+.add-project:hover {
+    color: var(--todo-brdr-clr);
+    background-color: var(--header-clr);
+}
+
+.add-project:hover > .hi-folder-add {
+    color: var(--todo-brdr-clr);
+}
 
 
 
@@ -401,9 +418,7 @@ input[type="checkbox"] {
     font-size: 1.3rem;
 }
 
-.hi-folder-add {
-    color: black;
-}
+
 /* .todo-row {
     min-height: 100%;
     width: 100%;
